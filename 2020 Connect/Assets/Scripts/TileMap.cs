@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TileMap : MonoBehaviour {
 
-	TileType[] tileTypes;
+	public TileType[] tileTypes;
 
 	int[,] tiles;
 
