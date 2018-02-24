@@ -583,5 +583,5 @@ MonoBehaviour:
   mapSizeY: 10
   startX: 0
   startY: 0
-  horiz: 0.75
+  horiz: 1.5
   vert: 0.433
