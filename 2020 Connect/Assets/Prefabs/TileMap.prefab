@@ -55,9 +55,18 @@ MonoBehaviour:
   - value: 1
   - value: 2
   - value: 4
-  defaultTilePrefab: {fileID: 1434692721678624, guid: cab683bcda1e2ac4880182ef1a690025,
-    type: 2}
-  mapSizeX: 10
-  mapSizeY: 10
+  - value: 8
+  - value: 16
+  - value: 32
+  - value: 64
+  - value: 128
+  - value: 256
+  - value: 512
+  numSpawnableTileTypes: 4
+  hexPrefab: {fileID: 1434692721678624, guid: cab683bcda1e2ac4880182ef1a690025, type: 2}
+  mapSizeX: 8
+  mapSizeY: 5
   startX: 0
   startY: 0
+  startingTilesMin: 3
+  startingTilesMax: 5

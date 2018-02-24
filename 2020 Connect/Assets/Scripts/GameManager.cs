@@ -27,8 +27,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void initiateGame() {
+		// Instantiate Input Manager
 		GameObject inputManagerGO = Instantiate(inputManagerPrefab);
 		inputManager = inputManagerGO.GetComponent<InputManager>();
+		// Instantiate Tile Map
 		GameObject tileMapGO = Instantiate(tileMapPrefab, Vector3.zero, Quaternion.identity, transform);
 		tileMap = tileMapGO.GetComponent<TileMap>();
 	}
