@@ -30,11 +30,46 @@ public class TileMap : MonoBehaviour {
 		GameManager.instance.inputManager.registerOnBgClickCb(deselect);
 	}
 
+	Hex cubeToHex(Vector3 cube) {
+		Vector2 offset = HexUtil.cubeToOffset(cube);
+		return tiles[(int)offset.x, (int)offset.y];
+	}
+
 	// Deselect currently selected hex
 	public void deselect() {
 		if (selected != null) {
 			selected.deselect();
 		}
+	}
+
+	List<Vector3> getConnections(Hex start) {
+		Vector3 currentCube;
+		List<Vector3> neighbours;
+		int matchValue = start.value;
+
+		Queue<Vector3> toVisit = new Queue<Vector3>();
+		toVisit.Enqueue(start.cubeCoords);
+
+		List<Vector3> connected = new List<Vector3>();
+		connected.Add(start.cubeCoords);
+
+		while(toVisit.Count > 0) {
+			currentCube = toVisit.Dequeue();
+			// Get list of valid neighbours
+			neighbours = HexUtil.cubeNeighbours(currentCube);
+
+			foreach (Vector3 neighbour in neighbours) {
+				// If neighbour hasn't been looked at yet and
+				//	has a matching value
+				if (!connected.Contains(neighbour) &&
+					!toVisit.Contains(neighbour) &&
+					cubeToHex(neighbour).value == matchValue) {
+						// Add to connected
+						connected.Add(neighbour);
+				}
+			}
+		}
+		return connected;
 	}
 
 	// Move currently selected hex to provided destination
@@ -43,6 +78,29 @@ public class TileMap : MonoBehaviour {
 			destination.value = selected.value;
 			selected.value = 0;
 			selected.deselect();
+
+			resolveConnections(destination);
+		}
+	}
+
+	void resolveConnections(Hex destination) {
+		List<Vector3> connected = getConnections(destination);
+
+		if (connected.Count >= 2) {
+			int newValue = destination.value * 4;
+
+			// Remove each connected tile
+			foreach (Vector3 cube in connected) {
+				cubeToHex(cube).value = 0;
+			}
+			// Add new tile at original space
+			destination.value = newValue;
+			// TODO: Add points
+			
+			// Resolve connections for new tile
+			resolveConnections(destination);
+		} else {
+			// TODO: CONTINUE HERE spawnWave();
 		}
 	}
 
@@ -71,6 +129,7 @@ public class TileMap : MonoBehaviour {
 				hexGO = Instantiate(hexPrefab, new Vector3(hexX, hexY, 0), Quaternion.identity, this.transform);
 				hex = hexGO.GetComponent<Hex>();
 				hex.value = 0;
+				hex.cubeCoords = HexUtil.OffsetToCube(new Vector2(x, y));
 				tiles[x, y] = hex;
 			}
 			oddRow = 1 - oddRow;	// Invert oddrow

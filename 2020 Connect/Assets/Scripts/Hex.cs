@@ -14,6 +14,7 @@ public class Hex : MonoBehaviour {
 	// 	get { return _coordinates; }
 	// 	set { _coordinates = value; }
 	// }
+	public Vector3 cubeCoords;
 
 	// The number shown on the tile's face
 	protected int _value;
